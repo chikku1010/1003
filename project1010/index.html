@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mischief Managed ⚡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital@0;1&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* The Magical Color Palette */
+        :root {
+            --parchment: #f4e8c1;
+            --ink: #2b1d0f;
+            --gold: #d4af37;
+            --dark-gold: #a68a2d; 
+            --accent: #740001; /* Gryffindor Red */
+            --dark-bg: #0a0a0a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--parchment);
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, #1a1a24 0%, #000 100%);
+            overflow-x: hidden; 
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin-top: 40px;
+            padding-bottom: 50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1, h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            letter-spacing: 2px;
+        }
+
+        .parchment-card {
+            background-color: var(--parchment);
+            color: var(--ink);
+            border-radius: 8px;
+            padding: 30px 20px;
+            box-shadow: inset 0 0 20px rgba(139, 69, 19, 0.2), 0 10px 20px rgba(0,0,0,0.8);
+            margin-bottom: 25px;
+            border: 1px solid #c8a97e;
+            position: relative;
+        }
+
+        /* --- Login Screen --- */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid var(--ink);
+            font-size: 1.1rem;
+            color: var(--ink);
+            font-family: 'Playfair Display', serif;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #5c4033;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .error-msg {
+            color: var(--accent);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            display: none;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+        }
+
+        /* --- Main Content --- */
+        #main-content {
+            display: none;
+            animation: fadeIn 1.5s;
+        }
+
+        /* --- Hogwarts Portrait Frame --- */
+        .portrait-frame {
+            background-color: #1a1a1a; 
+            padding: 15px; 
+            border-radius: 4px;
+            margin-bottom: 30px;
+            position: relative;
+            border: 10px solid var(--dark-gold);
+            box-shadow: 
+                0 10px 20px rgba(0,0,0,0.8), 
+                inset 0 0 15px rgba(0,0,0,0.9), 
+                0 0 0 2px #5c4033, 
+                0 0 30px rgba(212, 175, 55, 0.2); 
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><g fill="%23a68a2d" fill-opacity="0.1"><path d="M5 0h1v10H5zm0 0h10v1H0z"/></g></svg>');
+        }
+
+        .portrait-frame img {
+            width: 100%;
+            display: block;
+            border-radius: 2px;
+            filter: sepia(40%) contrast(110%) brightness(95%);
+            transition: filter 0.5s;
+        }
+
+        .portrait-frame:active img {
+            filter: sepia(0%) contrast(100%) brightness(100%);
+        }
+
+        .picture-caption {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--gold);
+            margin-top: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- Magical Postcard --- */
+        .magical-postcard {
+            background-color: var(--parchment);
+            color: var(--ink);
+            border-radius: 4px;
+            padding: 35px 25px;
+            box-shadow: inset 0 0 15px rgba(139, 69, 19, 0.3), 0 8px 16px rgba(0,0,0,0.7);
+            margin-bottom: 25px;
+            border: 1px solid #c8a97e;
+            position: relative;
+            background-image: repeating-linear-gradient(transparent, transparent 28px, rgba(139, 69, 19, 0.15) 29px);
+        }
+
+        .magical-postcard-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-bottom: 2px solid var(--ink);
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .handwriting {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            line-height: 29px;
+            text-align: left;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            font-family: 'Cinzel', serif;
+            padding: 15px 30px;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .hidden-message {
+            display: none;
+            margin-top: 25px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            animation: fadeIn 2s;
+            text-align: left;
+        }
+
+        /* --- THE GOLDEN SNITCH --- */
+        #snitch {
+            display: none; /* Hidden until she logs in */
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at 10px 10px, #fff200, #b8860b);
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ffd700, inset 0 0 10px #ffea00;
+            z-index: 9999;
+            cursor: pointer;
+            animation: flyAround 12s infinite ease-in-out;
+        }
+
+        /* Snitch Wings */
+        #snitch::before, #snitch::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            width: 25px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50% 50% 0 50%;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+        }
+
+        #snitch::before {
+            left: -20px;
+            transform-origin: right center;
+            animation: flapLeft 0.05s infinite alternate; /* Super fast flutter */
+        }
+
+        #snitch::after {
+            right: -20px;
+            border-radius: 50% 50% 50% 0;
+            transform-origin: left center;
+            animation: flapRight 0.05s infinite alternate;
+        }
+
+        @keyframes flapLeft {
+            from { transform: rotate(30deg); }
+            to { transform: rotate(-50deg); }
+        }
+
+        @keyframes flapRight {
+            from { transform: rotate(-30deg); }
+            to { transform: rotate(50deg); }
+        }
+
+        /* Flight Path Animation */
+        @keyframes flyAround {
+            0% { top: 15%; left: -10%; transform: scale(1); }
+            20% { top: 25%; left: 80%; transform: scale(1.2); }
+            40% { top: 60%; left: 10%; transform: scale(0.8); }
+            60% { top: 80%; left: 90%; transform: scale(1.1); }
+            80% { top: 40%; left: 40%; transform: scale(1); }
+            100% { top: 15%; left: 110%; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="snitch" onclick="catchSnitch()"></div>
+
+    <div class="container">
+        <div id="login-screen" class="parchment-card">
+            <h2>I solemnly swear that I am up to no good...</h2>
+            <p style="font-style: italic; margin-bottom: 25px;">State your identity to reveal the magic.</p>
+            
+            <div class="error-msg" id="error-message">Muggle detected! Incorrect password. 🚫</div>
+
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Wizard's Name" autocomplete="off">
+                <div class="hint">Hint: What you call me by</div>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Passcode">
+                <div class="hint">Hint: The date I proposed to you (Format: DDMMYYYY)</div>
+            </div>
+
+            <button class="btn" onclick="castAlohomora()">Cast Alohomora 🗝️</button>
+        </div>
+
+        <div id="main-content">
+            <h1>Happee Birthdae! ⚡</h1>
+            
+            <div class="parchment-card">
+                <p>To the brightest witch of her age😁,</p>
+                <p>I was going to get you a Firebolt, but the shipping from Diagon Alley was too slow. You'll just have to settle for me instead.</p>
+                <p>I love you more than Dobby loves socks. Also, keep an eye out for a Golden Snitch flying around... tap it if you can catch it!</p>
+            </div>
+
+            <div class="portrait-frame">
+                <img src="images/pic1.jpeg" alt="Us 1" onerror="this.src='https://via.placeholder.com/300x300/1a1a1a/d4af37?text=Moving+Portrait+1'">
+                <div class="picture-caption">Caught on the Marauder's Map</div>
+            </div>
+
+            <div class="portrait-frame">
+                <img src="images/pic2.jpeg" alt="Us 2" onerror="this.src='https://via.placeholder.com/300x300/1a1a1a/d4af37?text=Moving+Portrait+2'">
+                <div class="picture-caption">Under the Invisibility Cloak</div>
+            </div>
+
+            <div class="portrait-frame">
+                <img src="images/pic3.jpeg" alt="Us 3" onerror="this.src='https://via.placeholder.com/300x300/1a1a1a/d4af37?text=Moving+Portrait+3'">
+                <div class="picture-caption">Potions Class Disasters</div>
+            </div>
+
+            <div class="portrait-frame">
+                <img src="images/pic4.jpeg" alt="Us 4" onerror="this.src='https://via.placeholder.com/300x300/1a1a1a/d4af37?text=Moving+Portrait+4'">
+                <div class="picture-caption">Yule Ball Memories</div>
+            </div>
+
+            <div class="portrait-frame">
+                <img src="images/pic5.jpeg" alt="Us 5" onerror="this.src='https://via.placeholder.com/300x300/1a1a1a/d4af37?text=Moving+Portrait+5'">
+                <div class="picture-caption">Silvery vapour</div>
+            </div>
+
+            <div class="magical-postcard">
+                <div class="magical-postcard-title">Owl Post Delivery 🦉</div>
+                <div class="handwriting">
+                    My Dearest Witch 💕(Hendthi),<br><br>
+                    I wanted to make you more special on your day!, nang adhh hengg madbekuu antha gothagirlila modhlu(nangg nina meet agi celebrete madak ithuu actually😭, donno y u hate it🙃) like make you feel loved every moment soo came up with this idea and wanted you to enjoy and cherish this coz you deserve every bit of it.<br><br>
+                    I wanna make you feel having me in your life as your biggest flex my girl!!! nangg nin andree sakathh istaa kanoo idhela yenuu alla, nam first meet indha illi tanka nu i just love every moment of ours the time we spent together <br><br>
+                    you always make me feel home hendthi andre like nin jothee nan mathadlila andre i seriously feel bored, yenoo onthara khali khali ansuthe nange life alli(swalpara attension n time kodu nange idiot evagladruu, valle nandh nenape agala anno tara madtha idhiya ithichige kotii), nin yestee kadsidruu yeste iritate madidruu i dont feel like leaving you ( its all cuteee), nangg innu nin jothe beribeku mathad bekuu ansuthee, i just wanna be with you forever and ever.
+                    bari evath aste alla hendthii every day iste prethi indha nina nodak ista padthini kanoo, i wanna be the reason for your smile and the one who wipes away your tears.<br><br>
+                    Let's talk abt some love now😁😋, before i talk about it i really wanna be greatefull and be thankfull
+                    for the efforts and risks you took being a girl just to meet me 🥹 like its beyond someones expectation
+                    nin astu dharyaa nanguu irthilila hingg madake adhela.
+                    okay evagg nam ibruu chemistry bagge mathadodh adre its just 🤌 unmatchable kanoo, the way you kept trust on me 
+                    on our first meet itself was unexpexted from both of us, it shows like how much are 
+                    we both attached to each other like litrally we crave a hell lot for each other for that one physical touch, that one hug, that one kiss uff cant even 
+                    forget any moment of it, and when u came to hassan 😭 those precious moments we spent were
+                    unimaginable hendthi, nangg nijaa mathe mathe adhela moments sakath miss madkonthini kanoo,
+                    mathe ahh tara moments bekuu ansuthee, amele sakleshpura antru navv sakatsuu memories madkondidhivi
+                    that was was picture perfect date, wrong routes ge hogadh anthe, berevrr coffe estate alii pics kadhu muchi tekoladh anthe, helmet ge police hatra fine katodh 
+                    anthee shhhhhh🤧.<br><br>
+                    Thank you for having me back hendthii after all that happend with 
+                    me and ik it affected both of us and was was a realy tough time for us, thank you for 
+                    standing by me all the time kanoo, ningg nan yestee thankfull adruu kadmii cozz that is 
+                    the part you played in my life kanoo, In the end all i can say is that you are the 
+                    bestest thing that ever happend to me, and nan nin jothee javagluu irthinii kanoo no matter what the situation
+                    is nan nin jothe irthini astee! not only for this time but i want you for lifee 
+                    ninna bituu nangg irakk agalaa, nin nan jothee idreee nangg confidence idhe that by your 
+                    support i can face any situation that are to come in the future, the way you care me and make 
+                    me feel loved by you is the best feeling in the world for me, like even i cant love the most the way 
+                    you do...
+                    Nan ninna yavathuuu bithogala aythaaa idiot!!!
+                    Love you the most💋♾️🫀(myy sunflower🌻)<br><br>
+                    Mischief Managed,<br>
+                    Your Wizard(Chikku)
+                </div>
+            </div>
+
+            <button class="btn" onclick="castLumos()">Cast Lumos 🪄</button>
+
+            <div class="hidden-message parchment-card" id="secretMsg">
+                ✨ <strong>MISCHIEF MANAGED!</strong> ✨<br><br>
+                You are the most magical, amazing, and slightly chaotic person to me. Thank you for bewitching my heart. Now go celebrate you day hendthii.amele hengg anstuu
+                a special virtual gift from ur chikku ?.Hope you enjoyed this and loved it. ❤️
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // BRO: CHANGE THESE TWO VARIABLES TO YOUR ACTUAL DETAILS!
+        const correctUsername = "chikku"; 
+        const correctPassword = "22062025"; 
+
+        function castAlohomora() {
+            const enteredUser = document.getElementById('username').value.toLowerCase().trim();
+            const enteredPass = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+
+            if (enteredUser === correctUsername && enteredPass === correctPassword) {
+                // Success! Fade out login, fade in magic
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                
+                // Release the Golden Snitch!
+                document.getElementById('snitch').style.display = 'block';
+                
+                window.scrollTo(0, 0); 
+            } else {
+                // Failed! Show error message and shake the card
+                errorMessage.style.display = 'block';
+                const loginCard = document.getElementById('login-screen');
+                loginCard.style.transform = 'translateX(10px)';
+                setTimeout(() => loginCard.style.transform = 'translateX(-10px)', 100);
+                setTimeout(() => loginCard.style.transform = 'translateX(0)', 200);
+            }
+        }
+
+        // The Golden Snitch Logic
+        function catchSnitch() {
+            // Blast Hogwarts House Colors Confetti (Gryffindor Gold & Red)
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#d4af37', '#740001', '#ffffff'] 
+            });
+
+            // Hide the Snitch temporarily so she knows she caught it
+            const snitch = document.getElementById('snitch');
+            snitch.style.display = 'none';
+
+            // It respawns after 8 seconds so she can catch it again!
+            setTimeout(() => {
+                snitch.style.display = 'block';
+            }, 8000);
+        }
+
+        function castLumos() {
+            const msg = document.getElementById('secretMsg');
+            const btn = document.querySelector('#main-content .btn');
+            
+            if (msg.style.display === 'block') {
+                msg.style.display = 'none';
+                btn.innerHTML = 'Cast Lumos 🪄';
+            } else {
+                msg.style.display = 'block';
+                btn.innerHTML = 'Cast Nox 🌑 (Hide Message)';
+                setTimeout(() => {
+                    msg.scrollIntoView({ behavior: "smooth" });
+                }, 100);
+            }
+        }
+    </script>
+</body>
+</html>
